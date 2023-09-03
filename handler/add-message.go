@@ -1,14 +1,10 @@
 package handler
 
 import (
-	"database/sql"
-
 	"github.com/gin-gonic/gin"
 )
 
-func AddMessageHandler(c *gin.Context, db *sql.DB) {
-	mutex.Lock()
-	defer mutex.Unlock()
+func AddMessage(c *gin.Context) {
 	var input struct {
 		Date  string `json:"date"`
 		Verse string `json:"verse"`
@@ -17,7 +13,8 @@ func AddMessageHandler(c *gin.Context, db *sql.DB) {
 		c.JSON(400, gin.H{"error": "Bad request"})
 		return
 	}
-	_, err := db.Exec("INSERT INTO messages(time_to_show, verse) VALUES(?, ?)", input.Date, input.Verse)
+
+	_, err := DB.Exec("INSERT INTO messages(time_to_show, verse) VALUES(?, ?)", input.Date, input.Verse)
 	if err != nil {
 		c.JSON(500, gin.H{"error": "Internal Server Error"})
 		return
