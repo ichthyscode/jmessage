@@ -1,7 +1,0 @@
-{
-    "routes": [
-      { "src": "/api/get-message", "dest": "/api/get-message.go" },
-      { "src": "/api/add-message", "dest": "/api/add-message.go" }
-    ]
-  }
-  
