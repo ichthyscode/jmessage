@@ -1,11 +1,20 @@
-// add_message.go
-
 package handler
 
 import (
+	"database/sql"
 	"encoding/json"
 	"net/http"
+	"os"
 )
+
+func init() {
+	connStr := os.Getenv("POSTGRES_URL")
+	var err error
+	db, err = sql.Open("postgres", connStr)
+	if err != nil {
+		panic(err)
+	}
+}
 
 func AddMessage(w http.ResponseWriter, r *http.Request) {
 	var input struct {
@@ -18,7 +27,7 @@ func AddMessage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err := DB.Exec("INSERT INTO messages(time_to_show, verse) VALUES($1, $2)", input.Date, input.Verse)
+	_, err := db.Exec("INSERT INTO messages(time_to_show, verse) VALUES($1, $2)", input.Date, input.Verse)
 	if err != nil {
 		http.Error(w, "Internal Server Error", 500)
 		return
