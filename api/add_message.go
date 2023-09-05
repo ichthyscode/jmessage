@@ -1,20 +1,9 @@
 package handler
 
 import (
-	"database/sql"
 	"encoding/json"
 	"net/http"
-	"os"
 )
-
-func init() {
-	connStr := os.Getenv("POSTGRES_URL")
-	var err error
-	db, err = sql.Open("postgres", connStr)
-	if err != nil {
-		panic(err)
-	}
-}
 
 func AddMessage(w http.ResponseWriter, r *http.Request) {
 	var input struct {
