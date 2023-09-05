@@ -2,10 +2,13 @@ package handler
 
 import (
 	"encoding/json"
+	"jmessage/dbhelper"
 	"net/http"
 )
 
 func AddMessage(w http.ResponseWriter, r *http.Request) {
+	dbhelper.InitDB()
+
 	var input struct {
 		Date  string `json:"date"`
 		Verse string `json:"verse"`
@@ -16,7 +19,7 @@ func AddMessage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err := db.Exec("INSERT INTO messages(time_to_show, verse) VALUES($1, $2)", input.Date, input.Verse)
+	_, err := dbhelper.DB.Exec("INSERT INTO messages(time_to_show, verse) VALUES($1, $2)", input.Date, input.Verse)
 	if err != nil {
 		http.Error(w, "Internal Server Error", 500)
 		return
