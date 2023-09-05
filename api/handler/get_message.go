@@ -1,22 +1,23 @@
+// get_message.go
+
 package handler
 
 import (
-	"database/sql"
 	"encoding/json"
 	"net/http"
-
-	_ "github.com/mattn/go-sqlite3"
+	"sync"
 )
 
+var Mutex = &sync.Mutex{}
+
 func GetMessage(w http.ResponseWriter, r *http.Request) {
+	Mutex.Lock()
+	defer Mutex.Unlock()
+
 	var message string
 	err := DB.QueryRow("SELECT verse FROM messages WHERE time_to_show = CURRENT_DATE").Scan(&message)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			http.Error(w, "No verse found for today", 404)
-		} else {
-			http.Error(w, "Internal Server Error", 500)
-		}
+		http.Error(w, "No verse found for today", 404)
 		return
 	}
 
