@@ -2,16 +2,17 @@ package dbhelper
 
 import (
 	"database/sql"
-	"os"
+	"log"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
 var DB *sql.DB
 
 func InitDB() {
-	connStr := os.Getenv("POSTGRES_URL")
 	var err error
-	DB, err = sql.Open("postgres", connStr)
+	DB, err = sql.Open("sqlite3", "./lutherbibel_1545.sqlite") // Pfad zur neuen DB
 	if err != nil {
-		panic(err)
+		log.Fatalf("Failed to connect to database: %v", err)
 	}
 }
